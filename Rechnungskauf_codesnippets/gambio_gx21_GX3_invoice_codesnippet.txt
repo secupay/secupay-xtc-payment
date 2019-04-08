@@ -1,0 +1,62 @@
+---------------------------------------
+1. Versandmeldungs-URL zu Bestelldetails hinzufügen 
+---------------------------------------
+in Datei /admin/orders.php folgenden Code suchen:
+
+<!-- ORDERS - ABANDONMENT OF WITHDRAWAL - END -->
+
+<!-- ORDERS - DATA -->
+
+und durch folgenden Code ersetzen:
+
+<!-- ORDERS - ABANDONMENT OF WITHDRAWAL - END -->
+
+<!-- begin modification for secupay_inv_xtc -->
+<?php
+if (($order->info['payment_method'] == 'secupay_inv_xtc' || $order->info['payment_method'] == 'secupay_b2b_xtc' ||$order->info['payment_method'] == 'secupay_pp_xtc') && file_exists(DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_orders.php')) {
+    echo'<table border="1">';
+    include( DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_orders.php' );
+    echo'</table>';
+}
+?>
+<!-- end modification for secupay_inv_xtc -->
+
+<!-- ORDERS - DATA -->
+
+
+---------------------------------------
+2. Informationen für PDF-Rechnung 
+---------------------------------------
+in Datei /admin/gm_pdf_order.php folgenden Code suchen:
+
+/*
+ * -> create pdf
+ */
+$pdf = new gmOrderPDF(
+	$_GET['type'], $order_right, $order_data, $order_total, $order_info, $pdf_footer, $pdf_fonts, $gm_pdf_values, $gm_order_pdf_values, $gm_use_products_model
+);
+
+$pdf->Body();
+
+und durch folgenden Code ersetzen:
+
+//begin modification for secupay_inv_xtc
+if (($order->info['payment_method'] == 'secupay_inv_xtc' || $order->info['payment_method'] == 'secupay_b2b_xtc' || $order->info['payment_method'] == 'secupay_pp_xtc') && file_exists(DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_hint_gm_pdf_order_2.php')) {
+	include( DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_hint_gm_pdf_order_2.php' );
+}	
+//end modification for secupay_inv_xtc
+
+/*
+ * -> create pdf
+ */
+$pdf = new gmOrderPDF(
+	$_GET['type'], $order_right, $order_data, $order_total, $order_info, $pdf_footer, $pdf_fonts, $gm_pdf_values, $gm_order_pdf_values, $gm_use_products_model
+);
+
+$pdf->Body();
+
+//begin modification for secupay_inv_xtc
+if (($order->info['payment_method'] == 'secupay_inv_xtc'  || $order->info['payment_method'] == 'secupay_b2b_xtc'  || $order->info['payment_method'] == 'secupay_pp_xtc')&& file_exists(DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_gm_pdf_order_2.php')) {
+	include( DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_gm_pdf_order_2.php' );
+}
+//end modification for secupay_inv_xtc

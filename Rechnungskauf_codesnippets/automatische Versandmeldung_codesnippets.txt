@@ -1,0 +1,26 @@
+## Vor der Installation:
+------------------------------------------------
+Fertigen Sie bitte aus Sicherheitsgr?nden von allen Dateien Ihres Shops 
+ein Backup. Wir ?bernehmen keine Haftung f?r Sch?den, die aus einer 
+mangelhaften Datensicherung entstehen. 
+
+## Die Installation:
+------------------------------------------------
+------------------------------------------------
+admin/includes/application_top.php
+------------------------------------------------
+
+Am Ende vor ?> bzw. vor header('Content-Type:.....
+einf?gen:
+
+include_once(DIR_WS_FUNCTIONS . 'secupay_autoshipping.php');
+sendautoshipping();
+
+
+
+Bitte aktivieren sie folgende Module
+
+Empfohlen f?r xt:Commerce - Sendungsverfolgung (Track and Trace) 
+
+Empfohlen f?r XTC modified -  Track_and_Trace
+

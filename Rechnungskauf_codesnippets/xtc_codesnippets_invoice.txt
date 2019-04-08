@@ -1,0 +1,33 @@
+1. in Datei /admin/orders.php ab Zeile 420 einfügen, die folgende Zeile sollte "if ($order->info['payment_method'] == 'amoneybookers') {" lauten
+//begin modification for secupay_inv_xtc
+if (($order->info['payment_method'] == 'secupay_inv_xtc' || $order->info['payment_method'] == 'secupay_b2b_xtc' || $order->info['payment_method'] == 'secupay_pp_xtc') && file_exists(DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_orders.php')) {
+    include( DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_orders.php' );
+}
+//end modification for secupay_inv_xtc
+
+2. Rechnungsdruck
+2.1 in Datei /admin/print_order.php ab Zeile 105 einfügen, die vorherige Zeile sollte mit $payment_method beginnen, die folgende Zeile sollte "$smarty->assign('PAYMENT_METHOD',$payment_method);" lauten
+
+//begin modification for secupay_inv_xtc
+if (($order->info['payment_method'] == 'secupay_inv_xtc' || $order->info['payment_method'] == 'secupay_b2b_xtc' || $order->info['payment_method'] == 'secupay_pp_xtc') && file_exists(DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_print_order.php')) {
+    include( DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_print_order.php' );
+    $smarty->assign('SECUPAY_PAYMENT_INFO',$secupay_payment_info);
+    if(!empty($secupay_payment_info_qr_code)) {
+        $smarty->assign('SECUPAY_PAYMENT_INFO_QR_CODE',$secupay_payment_info_qr_code);
+    }
+}
+//end modification for secupay_inv_xtc
+
+2.2
+in /templates/<ihr Templateverzeichnis>/admin/print_order.html am Ende vor </body> einfügen oder falls eine Fußzeile verwendet wird oberhalb davon (die Formatierung muss gegebenenfalls an Ihr Template angepasst werden)
+
+{if $SECUPAY_PAYMENT_INFO}
+<div style="font-size:11px; font-family:Verdana, Arial, Helvetica, sans-serif;">
+<table width="100%" border="0" cellpadding="3" cellspacing="0" style="font-size:11px; font-family:Verdana, Arial, Helvetica, sans-serif;">
+	<tr>
+		<td>{$SECUPAY_PAYMENT_INFO_QR_CODE}</td>
+		<td>{$SECUPAY_PAYMENT_INFO}</td>
+	</tr>
+</table>
+</div>
+{/if}

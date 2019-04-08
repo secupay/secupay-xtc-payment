@@ -1,0 +1,11 @@
+in Datei /inc/xtc_pdf_bill.inc.php nach folgender Zeile suchen
+
+$pdf->Betrag($order_data);
+
+danach in einer neuen Zeile folgendes einfügen:
+
+	//begin modification for secupay_inv_xtc
+	if (!$deliverSlip && ($order->info['payment_method'] == 'secupay_inv_xtc' || $order->info['payment_method'] == 'secupay_b2b_xtc' || $order->info['payment_method'] == 'secupay_pp_xtc') && file_exists(DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_gm_pdf_order.php')) {
+		include( DIR_FS_CATALOG.DIR_WS_INCLUDES.'secupay/secupay_pdfbill_xtc_pdf_bill.inc.php' );
+	}
+	//end modification for secupay_inv_xtc
